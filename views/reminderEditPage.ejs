@@ -1,0 +1,41 @@
+<h1>
+  Edit your reminder here!
+</h1>
+
+<form method="post" action="/updateReminder/<%= reminder._id %>" class="bg-info">
+  Enter the your name:
+  <input type="text"
+         name="name"
+         value="<%= reminder.name %>"
+         placeholder="<%= reminder.name %>"><br><br>
+
+  What is the task you want to complete?
+  <input type="text"
+         name="task"
+         value="<%= reminder.task %>"
+         placeholder="<%= reminder.task %>"><br><br>
+
+  When do you wish to be reminded?
+  <input type="text"
+         name="time"
+         value="<%= reminder.time %>"
+         placeholder="<%= reminder.time %>"><br><br>
+
+  How would you like to be notified?
+  <select name="channel">
+    <option>Email</option>
+    <option>Twitter</option>
+    <option>Facebook</option>
+  </select>
+
+  (Optional) Notes about your task:
+  <input type="text"
+         name="notes"
+         value="<%= reminder.notes %>"
+         placeholder="<%= reminder.notes %>"><br><br>
+  <br><br>
+
+  <input type="submit" value="Update Now">
+</form>
+
+<hr>
