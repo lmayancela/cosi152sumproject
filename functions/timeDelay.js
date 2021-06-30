@@ -12,15 +12,15 @@ const Clock = (props) => {
   // const [currtime, setCurrTime] = useState(today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds());
 
   useEffect(() => {
-        let interval = setInterval(() => {
-          console.log("Time at tick:" + currtime);
-          tick()
-          console.log('A minute has passed');
-        }, 60000)
-        return () => {
-            clearInterval(interval);
-        }
-    }, []);
+    let interval = setInterval(() => {
+      console.log("Time at tick:" + currtime);
+      tick()
+      console.log('A minute has passed');
+    }, 60000)
+    return () => {
+      clearInterval(interval);
+    }
+  }, []);
 
   function tick() {
     today = new Date()
@@ -29,8 +29,8 @@ const Clock = (props) => {
     props.parentCallback(currtime);
   }
 
-  return(
-    <Text> Clock is running: {currtime} </Text>
+  return (
+    <Text> Clock's current time is: {currtime} </Text>
   )
 }
 
