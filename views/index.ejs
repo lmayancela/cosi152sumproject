@@ -1,0 +1,12 @@
+
+
+  <div class="jumbotron">
+    <h1> Bother Me! </h1>
+    <ul>
+      <% if (loggedIn) {%>
+      <li><a href="/reminderForm">Set a new reminder </a></li>
+      <li><a href="/reminderList">All reminders </a></li>
+      <li><a href="/profile">See your profile </a></li>
+      <% } %>
+    </ul>
+  </div>

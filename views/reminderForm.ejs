@@ -1,0 +1,33 @@
+<h1>
+  Set a new reminder!
+</h1>
+
+<form method="post" action="/postReminder" class="bg-info">
+  Enter the your name:
+  <input type="text"
+         name="name"><br><br>
+
+  What is the task you want to complete?
+  <input type="text"
+         name="task"><br><br>
+
+  When do you wish to be reminded?
+  <input type="text"
+         name="time"><br><br>
+
+  How would you like to be notified?
+  <select name="channel">
+    <option>Email</option>
+    <option>Twitter</option>
+    <option>Facebook</option>
+  </select><br><br>
+
+  (Optional) Notes about your task:
+  <input type="text"
+         name="notes"><br><br>
+  <br><br>
+
+  <input type="submit" value="Set Now">
+</form>
+
+<hr>
