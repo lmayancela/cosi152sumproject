@@ -2,40 +2,88 @@
   Edit your reminder here!
 </h1>
 
-<form method="post" action="/updateReminder/<%= reminder._id %>" class="bg-info">
-  Enter the your name:
-  <input type="text"
-         name="name"
-         value="<%= reminder.name %>"
-         placeholder="<%= reminder.name %>"><br><br>
-
-  What is the task you want to complete?
-  <input type="text"
-         name="task"
-         value="<%= reminder.task %>"
-         placeholder="<%= reminder.task %>"><br><br>
-
-  When do you wish to be reminded?
-  <input type="text"
-         name="time"
-         value="<%= reminder.time %>"
-         placeholder="<%= reminder.time %>"><br><br>
-
-  How would you like to be notified?
-  <select name="channel">
-    <option>Email</option>
-    <option>Twitter</option>
-    <option>Facebook</option>
-  </select>
-
-  (Optional) Notes about your task:
-  <input type="text"
-         name="notes"
-         value="<%= reminder.notes %>"
-         placeholder="<%= reminder.notes %>"><br><br>
-  <br><br>
-
-  <input type="submit" value="Update Now">
+<form method="post" action="/reminder/update/<%= reminder._id %>" class="bg-info container-fluid" style="padding: 10px;">
+  <div class="form-group">
+    <div class="form-group col-sm-6">
+      <label for="name">Your Name</label>
+      <input id="name" type="text" class="form-control" name="name" readonly aria-describedby="nameHelp"
+        value="<%= user.googlename %>">
+      <small id="nameHelp" class="form-text text-muted">
+        We got this information from your Google account.
+        <a href="/profile/edit"> Modify your info </a>
+      </small>
+    </div>
+    <div class="form-group col-sm-6">
+      <label for="email">Email</label>
+      <input id="email" type="text" class="form-control" name="email" readonly aria-describedby="nameHelp"
+        value="<%= user.googleemail %>">
+    </div>
+  </div>
+  <div class="form-group col-sm-12">
+    <label for="task">Task</label>
+    <input type="text" class="form-control" name="task" placeholder="What would you like to do?"
+      value="<%= reminder.task %> " autofocus required>
+  </div>
+  <div class="form-group">
+    <div id="dateTimeGroup" class="form-row">
+      <% let d=new Date(); let e=new Date(); e.setDate(d.getDate() + 3); let timeReg=/[T\.Z]/; %>
+          <div id="dateGroup" class="form-group col-sm-6">
+            <label for="dateSelector">Remind me on...</label>
+            <input id="dateSelector" type="date" name="date" class="form-control"
+              value="<%= oldTime.date %>" onchange="updateBounds()"
+              min="<%= d.toISOString().split(timeReg)[0] %>" max="<%= e.toISOString().split(timeReg)[0] %>" required>
+          </div>
+          <div id="timeGroup" class="form-group col-sm-6">
+            <label for="timeSelector">at</label>
+            <input id="timeSelector" type="time" step="1" name="time" class="form-control"
+              value="<%= oldTime.time %>" required>
+            <small id="dateHelp" class="form-text text-muted">
+              Your browser reports the current time as <time id="currentTime">
+                <%= d.toString().split(/\d{2} \d{4} | GMT/)[1] %>
+              </time>.
+            </small>
+          </div>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-sm-2">
+      <label for="channel" class="input-group-text">Notify me via:</label>
+      <select class="form-control" name="channel" value="<%= reminder.channel %>" required>
+        <option value="Email">Email</option>
+        <option value="Twitter">Twitter</option>
+        <option value="Facebook">Facebook</option>
+      </select>
+    </div>
+    <div class="form-group col-sm-10">
+      <label for="notes">Notes about your task (optional):</label>
+      <textarea class="form-control" id="notes" name="notes"><%= reminder.notes %></textarea>
+    </div>
+  </div>
+  <a id="backlink" class="btn btn-primary" href="/reminder/list">Never Mind</a>
+  <button type="submit" class="btn btn-primary pull-right">Update my reminder!</button>
 </form>
+<script>
+  function updateBounds() {
+    const ds = document.getElementById('dateSelector');
+    const ts = document.getElementById('timeSelector');
+    const ct = document.getElementById('currentTime');
+    let inputDate = new Date(ds.value);
+    let now = new Date();
+    let dateMax = new Date(); dateMax.setDate(dateMax.getDate() + 3);
+    if (inputDate.getDate() == now.getDate()) {
+      ts.setAttribute('min', now.toTimeString().split(' ')[0]);
+      ts.removeAttribute('max');
+    } else if (inputDate.getDate() == dateMax.getDate()) {
+      ts.removeAttribute('min');
+      ts.setAttribute('max', now.toTimeString().split(' ')[0]);
+    } else {
+      ts.removeAttribute('min');
+      ts.removeAttribute('max');
+    }
+  }
 
-<hr>
+  setInterval(() => {
+    document.getElementById('currentTime').innerHTML = new Date().toTimeString().split(' ')[0];
+  }, 1000);
+
+</script>

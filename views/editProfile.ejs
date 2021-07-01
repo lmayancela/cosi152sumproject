@@ -8,34 +8,27 @@
 <div class="row">
   <div class="col-sm-4">
   </div>
-  <form method="post" action="profile/edit">
+  <form method="post" action="edit">
     <div class="col-sm-4">
         <table class="table table-bordered">
           <tbody>
             <tr>
-              <td>googlename</td>
+              <td>Google Name</td>
               <td><%= user.googlename %></td>
             </tr>
             <tr>
-              <td>googleemail</td>
+              <td>Google Email</td>
               <td><%= user.googleemail %></td>
             </tr>
             <tr>
-              <td>username</td>
+              <td>Preferred Name</td>
               <td>
                 <input type="text" name="username"
                    value="<%= user.username %>">
               </td>
             </tr>
             <tr>
-              <td>age</td>
-              <td>
-                <input type="text" name="age"
-                   value="<%= user.age %>">
-              </td>
-            </tr>
-            <tr>
-              <td>imageURL</td>
+              <td>Profile Image URL</td>
               <td>
                 <input type="text" name="imageURL"
                    value="<%= user.imageURL %>">
@@ -48,5 +41,5 @@
   <div class="col-sm-4">
   </div>
 </div>
-<input class="btn btn-lg btn-danger" type="submit" value="update Profile">
+<input class="btn btn-lg btn-success" type="submit" value="Save Profile">
 </form>

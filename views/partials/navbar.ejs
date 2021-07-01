@@ -1,0 +1,12 @@
+<div id="nav">
+  <div class="col-sm nav-align">
+    <a class="btn btn-primary" href="/">Home</a>
+    <% if (loggedIn) {%>
+      <a class="btn btn-link" href="/profile">Profile</a>
+      <a class="btn btn-link" href="/logout">Logout</a>
+      Logged in as <%= user.googleemail %>.
+    <% } else { %>
+      <a class="btn btn-link" href="/auth/google">Login</a>
+    <% } %>
+  </div>
+</div>

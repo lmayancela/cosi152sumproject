@@ -11,24 +11,7 @@
 
 <body>
  <div class="container-fluid">
-	<div id="nav">
-		<div class="col-sm nav-align">
-			<a href="/">
-				<span class="button">Home</span>
-			</a>
-			<% if (!loggedIn) {%>
-			<a href="/auth/google">
-				<span class="button">Login</span>
-			</a>
-			<% } else  { %>
-				<%= user.googleemail %>
-			<a href="/logout">
-				<span class="button">Logout</span>
-			</a>
-			<% } %>
-
-		</div>
-	</div>
+	<%- include('./partials/navbar')  %> 
 
 	<%- body %>
  </div>

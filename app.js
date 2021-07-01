@@ -9,7 +9,7 @@ const layouts = require("express-ejs-layouts");
 
 const mongoose = require('mongoose');
 //mongoose.connect( `mongodb+srv://${auth.atlasAuth.username}:${auth.atlasAuth.password}@cluster0-yjamu.mongodb.net/authdemo?retryWrites=true&w=majority`);
-mongoose.connect('mongodb://localhost/authDemo');
+mongoose.connect('mongodb://localhost/botherme', {useNewUrlParser: true, useUnifiedTopology: true});
 //const mongoDB_URI = process.env.MONGODB_URI
 //mongoose.connect(mongoDB_URI)
 
@@ -27,8 +27,8 @@ const loggingRouter = require('./routes/logging');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const profileRouter = require('./routes/profile');
+const reminderRouter = require('./routes/reminder');
 
-const Reminder = require('./models/Reminder');
 const User = require('./models/User');
 
 const app = express();
@@ -49,88 +49,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(authRouter)
 app.use(loggingRouter);
 app.use('/', indexRouter);
+app.use('/reminder', reminderRouter);
 app.use('/profile', profileRouter);
 app.use('/users', usersRouter);
-
-
-app.get('/reminderForm',
-  isLoggedIn,
-  (req, res) => {
-    res.render('reminderForm')
-  })
-
-const sendMail = require('./functions/sendMail')
-
-app.post('/postReminder',
-  isLoggedIn,
-  async (req, res, next) => {
-    let reqDateTime = new Date(`${req.body.date}T${req.body.time}`)
-    const reminder = new Reminder(
-      {
-        name: req.body.name,
-        time: reqDateTime,
-        task: req.body.task,
-        channel: req.body.channel,
-        notes: req.body.notes,
-        userId: req.user._id,
-      })
-    if (req.body.channel = "Email") {
-      sendMail(req.body, reqDateTime); // What, When
-    }
-    await reminder.save();
-    res.redirect('/reminderList')
-  });
-
-app.get('/reminderList',
-  isLoggedIn,
-  async (req, res, next) => {
-    res.locals.reminders = await Reminder.find({ userId: req.user._id })
-    res.locals.count = 1
-    res.render('reminderList');
-  });
-
-app.get('/updateReminder/:id',
-  isLoggedIn,
-  async (req, res, next) => {
-    var id = req.params.id;
-    res.locals.reminder = await Reminder.findOne({ _id: id })
-    res.render('reminderEditPage');
-  });
-
-app.post('/updateReminder/:id',
-  isLoggedIn,
-  async (req, res, next) => {
-    var id = req.params.id;
-    Reminder.updateOne(
-      { _id: id },
-      {
-        $set: {
-          name: req.body.name,
-          task: req.body.task,
-          time: req.body.time,
-          notes: req.body.notes,
-          channel: req.body.channel,
-        }
-      },
-      function (err, result) {
-        if (err) throw err;
-      }
-    );
-    res.redirect('/reminderList');
-  });
-
-app.post('/deleteReminder/:id',
-  isLoggedIn,
-  async (req, res, next) => {
-    var id = req.params.id;
-    Reminder.deleteOne(
-      { _id: id },
-      function (err, result) {
-        if (err) throw err;
-      }
-    );
-    res.redirect('/reminderList');
-  });
 
 app.get('/profiles',
   isLoggedIn,
