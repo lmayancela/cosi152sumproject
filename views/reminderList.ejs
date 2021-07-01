@@ -17,13 +17,38 @@
     </div>
     <br>
     <div>
+      <% if (reminder.rate == 0) { %>
       <form style="float: left" method="get" action="/reminder/update/<%=reminder._id %>">
         <input type="submit" value="Edit">
       </form>
-
+      <% } %>
       <form style="float: left" method="post" action="/reminder/delete/<%=reminder._id %>">
         <input type="submit" value="Delete">
       </form>
+    </div>
+    <br><br>
+    <div>
+      <% if (reminder.rate == 0) { %>
+      <form style="float: left" method="post" action="/reminder/rate/<%=reminder._id %>">
+          <label for="channel" class="input-group-text">Give a rate on this task:</label>
+          <select class="form-control" name="rate">
+            <option value="5">5</option>
+            <option value="4">4</option>
+            <option value="3">3</option>
+            <option value="2">2</option>
+            <option value="1">1</option>
+          </select>
+        <input type="submit" value="Done">
+      </form>
+      <% } %>
+    <% if (reminder.rate > 0) { %>
+       Finished!
+     <p>
+     <% for (let i = 0; i < reminder.rate; i++) {   %>
+        <i class="fa fa-star text-info" ></i>
+     <% } %>
+     </p>
+    <% } %>
     </div>
     <br><br>
     <% count=count + 1 %>

@@ -24,6 +24,7 @@ router.post('/create',
         channel: req.body.channel,
         notes: req.body.notes,
         userId: req.user._id,
+        rate: 0,
       })
       // ! Commented out email sending until I can figure out why I'm getting 400 errors randomly
     // if (req.body.channel = "Email") {
@@ -92,6 +93,24 @@ router.post('/delete/:id',
     var id = req.params.id;
     Reminder.deleteOne(
       { _id: id },
+      function (err, result) {
+        if (err) throw err;
+      }
+    );
+    res.redirect('/reminder/list');
+  });
+
+router.post('/rate/:id',
+  isLoggedIn,
+  async (req, res, next) => {
+    var id = req.params.id;
+    Reminder.updateOne(
+      { _id: id },
+      {
+        $set: {
+          rate: parseInt(req.body.rate),
+        }
+      },
       function (err, result) {
         if (err) throw err;
       }

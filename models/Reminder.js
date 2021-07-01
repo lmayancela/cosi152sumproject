@@ -10,6 +10,7 @@ var reminderSchema = Schema( {
   channel: String,
   notes: String,
   userId: ObjectId,
+  rate: Number,
   //participants: [String]
 } );
 
