@@ -1,31 +1,32 @@
 <div class="jumbotron">
-  <h1> Your Reminder List </h1>
+  <h1> <%= user.googlename %>'s Reminder List </h1>
 
-    <% reminders.forEach(reminder => { %>
-      <div style="border-top:thick solid blue; margin:20; padding:10">
-          <h1 class="bg-warning"> Reminder <%= count %> </h1>
-          <div class="row">
-            <ul>
-              <li> Set by: <%= reminder.name %></li>
-              <li> Notify at: <%= reminder.time %></li>
-              <li> Task: <%= reminder.task %></li>
-              <li> Notify by: <%= reminder.channel %></li>
-              <li> Notes: <%= reminder.notes %></li>
-            </ul>
-          </div>
+  <% reminders.forEach(reminder => { %>
+    <div style="border-top:thick solid blue; margin:20; padding:10">
+      <h1 class="bg-warning"> Reminder <%= count %>
+      </h1>
+      <div class="row">
+        <ul>
+          <li> For: <%= reminder.name %></li>
+          <li> Remind at <%= reminder.time %></li>
+          <li> Task: <strong><%= reminder.task %></strong></li>
+          <li> Via: <%= reminder.channel %></li>
+          <li> Notes: <em><%= reminder.notes %> </em></li>
+        </ul>
       </div>
-        <br>
-        <div>
-        <form style="float: left" tmethod="get" action="/updateReminder/<%=reminder._id %>">
-            <input type="submit" value="Edit">
-        </form>
+    </div>
+    <br>
+    <div>
+      <form style="float: left" method="get" action="/updateReminder/<%=reminder._id %>">
+        <input type="submit" value="Edit">
+      </form>
 
-        <form style="float: left" method="post" action="/deleteReminder/<%=reminder._id %>">
-            <input type="submit" value="Delete">
-        </form>
-       </div>
-       <br><br>
-      <% count = count + 1 %>
-    <% }) %>
+      <form style="float: left" method="post" action="/deleteReminder/<%=reminder._id %>">
+        <input type="submit" value="Delete">
+      </form>
+    </div>
+    <br><br>
+    <% count=count + 1 %>
+      <% }) %>
 
 </div>
