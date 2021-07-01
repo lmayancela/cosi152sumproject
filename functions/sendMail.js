@@ -18,6 +18,7 @@ function sendMail(what, when) {
       \nBe Productive,\nBotherMe Team`,
         html: `<body>Hello ${what.name},</p><p style="padding:12px;border-left:4px solid #d0d0d0;font-style:italic">
         This is a reminder to ${what.task} by ${what.time}.</p><p>Be Productive,<br>BotherMe Team</p></body>`,
+        batchId: 'dev_data',
     }
     sgMail
         .send(msg)

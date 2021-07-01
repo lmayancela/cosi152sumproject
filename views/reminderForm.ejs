@@ -28,13 +28,13 @@
       <% let d=new Date(); let e=new Date(); e.setDate(d.getDate() + 3); let timeReg=/[T\.Z]/ %>
         <div id="dateGroup" class="form-group col-sm-6">
           <label for="dateSelector">Remind me on...</label>
-          <input id="dateSelector" type="date" name="date" placeholder="DD-Mon-YYYY" class="form-control"
+          <input id="dateSelector" type="date" name="date" class="form-control"
             onchange="updateBounds()" min="<%= d.toISOString().split(timeReg)[0] %>"
             max="<%= e.toISOString().split(timeReg)[0] %>" required>
         </div>
         <div id="timeGroup" class="form-group col-sm-6">
           <label for="timeSelector">at</label>
-          <input id="timeSelector" type="time" name="time" placeholder="HH:MM" class="form-control" required>
+          <input id="timeSelector" type="time" step="1" name="time" class="form-control" required>
           <small id="dateHelp" class="form-text text-muted">
             Your browser reports the current time as <time id="currentTime">
               <%= d.toString().split(/\d{2} \d{4} | GMT/)[1] %>
