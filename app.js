@@ -29,7 +29,6 @@ const usersRouter = require('./routes/users');
 const profileRouter = require('./routes/profile');
 const reminderRouter = require('./routes/reminder');
 
-const Reminder = require('./models/Reminder');
 const User = require('./models/User');
 
 const app = express();
@@ -50,104 +49,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(authRouter)
 app.use(loggingRouter);
 app.use('/', indexRouter);
-app.use('/reminder/', reminderRouter);
+app.use('/reminder', reminderRouter);
 app.use('/profile', profileRouter);
 app.use('/users', usersRouter);
-
-
-app.get('/reminderForm',
-  isLoggedIn,
-  (req, res) => {
-    res.render('reminderForm')
-  })
-
-const sendMail = require('./functions/sendMail')
-
-app.post('/postReminder',
-  isLoggedIn,
-  async (req, res, next) => {
-    let reqDateTime = new Date(`${req.body.date}T${req.body.time}`)
-    const reminder = new Reminder(
-      {
-        name: req.body.name,
-        task: req.body.task,
-        time: reqDateTime,
-        channel: req.body.channel,
-        notes: req.body.notes,
-        userId: req.user._id,
-      })
-    if (req.body.channel = "Email") {
-      sendMail(req.body, reqDateTime); // What, When
-    }
-    await reminder.save();
-    res.redirect('/reminderList')
-  });
-
-app.get('/reminderList',
-  isLoggedIn,
-  async (req, res, next) => {
-    res.locals.reminders = await Reminder.find({ userId: req.user._id })
-    res.locals.count = 1
-    res.render('reminderList');
-  });
-
-app.get('/updateReminder/:id',
-  isLoggedIn,
-  async (req, res, next) => {
-    try {
-      var id = req.params.id;
-      const reminder = await Reminder.findOne({ _id: id })
-      console.log(`Found reminder: ${JSON.stringify(reminder)}`)
-      const timeReg = /[T\.Z]/;
-      let utcTime = new Date(reminder.time); // We need to adjust the time offset from UTC before loading
-      const offset = new Date().getTimezoneOffset();
-      utcTime.setMinutes(utcTime.getMinutes() - offset);
-      res.locals.reminder = reminder;
-      res.locals.oldTime = {
-        date: utcTime.toISOString().split(timeReg)[0],
-        time: utcTime.toISOString().split(timeReg)[1],
-      }
-      res.render('reminderEditPage');
-    } catch (e) {
-      next(e)
-    }
-  });
-
-app.post('/updateReminder/:id',
-  isLoggedIn,
-  async (req, res, next) => {
-    var id = req.params.id;
-    let reqDateTime = new Date(`${req.body.date}T${req.body.time}`)
-    Reminder.updateOne(
-      { _id: id },
-      {
-        $set: {
-          name: req.body.name,
-          task: req.body.task,
-          time: reqDateTime,
-          channel: req.body.channel,
-          notes: req.body.notes,
-        }
-      },
-      function (err, result) {
-        if (err) throw err;
-      }
-    );
-    res.redirect('/reminderList');
-  });
-
-app.post('/deleteReminder/:id',
-  isLoggedIn,
-  async (req, res, next) => {
-    var id = req.params.id;
-    Reminder.deleteOne(
-      { _id: id },
-      function (err, result) {
-        if (err) throw err;
-      }
-    );
-    res.redirect('/reminderList');
-  });
 
 app.get('/profiles',
   isLoggedIn,

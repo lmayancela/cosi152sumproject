@@ -2,7 +2,7 @@
   Edit your reminder here!
 </h1>
 
-<form method="post" action="/updateReminder/<%= reminder._id %>" class="bg-info container-fluid" style="padding: 10px;">
+<form method="post" action="/reminder/update/<%= reminder._id %>" class="bg-info container-fluid" style="padding: 10px;">
   <div class="form-group">
     <div class="form-group col-sm-6">
       <label for="name">Your Name</label>
@@ -56,10 +56,10 @@
     </div>
     <div class="form-group col-sm-10">
       <label for="notes">Notes about your task (optional):</label>
-      <textarea class="form-control" id="notes" name="notes" value="<%= reminder.notes %>"></textarea>
+      <textarea class="form-control" id="notes" name="notes"><%= reminder.notes %></textarea>
     </div>
   </div>
-  <a id="backlink" class="btn btn-primary" href="/reminderList">Never Mind</a>
+  <a id="backlink" class="btn btn-primary" href="/reminder/list">Never Mind</a>
   <button type="submit" class="btn btn-primary pull-right">Update my reminder!</button>
 </form>
 <script>
