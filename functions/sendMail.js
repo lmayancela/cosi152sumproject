@@ -6,22 +6,24 @@ sgMail.setApiKey(sgAPI);
 // SendMail module
 // using Twilio SendGrid's v3 Node.js Library
 // https://github.com/sendgrid/sendgrid-nodejs'
-function sendMail(user, task) {
-    console.log("TESTMAIL", JSON.stringify(user), JSON.stringify(task))
+function sendMail(what, when) {
+    console.log("TESTMAIL", JSON.stringify(what.task), when)
     const msg = {
-        to: user.googleemail, // Change to your recipient
+        to: what.email, // Change to your recipient
         from: 'botherme@brandeis.edu',
-        subject: `Reminder for task: ${task.task}`,
-        text: `Hello ${user.googlename},\nThis is a reminder to do your task: ${task.task}
-      \nMake sure you get it done by ${task.time}!
+        subject: `Reminder for task: ${what.task}`,
+        sendAt: Math.floor(when.getTime() / 1000),
+        text: `Hello ${what.name},\nThis is a reminder to do your task: ${what.task}
+      \nMake sure you get it done by ${what.time}!
       \nBe Productive,\nBotherMe Team`,
-        html: `<body>Hello ${user.googlename},</p><p style="padding:12px;border-left:4px solid #d0d0d0;font-style:italic">
-        This is a reminder to ${task.task} by ${task.time}.</p><p>Be Productive,<br>BotherMe Team</p></body>`,
+        html: `<body>Hello ${what.name},</p><p style="padding:12px;border-left:4px solid #d0d0d0;font-style:italic">
+        This is a reminder to ${what.task} by ${what.time}.</p><p>Be Productive,<br>BotherMe Team</p></body>`,
     }
     sgMail
         .send(msg)
         .then(() => {
-            console.log(`Email sent to ${user.googleemail}`)
+            console.log(`Email sent to ${what.email}.`);
+            console.log(`Payload: ${JSON.stringify(msg)}`)
         })
         .catch((error) => {
             console.error(error)

@@ -64,18 +64,19 @@ const sendMail = require('./functions/sendMail')
 app.post('/postReminder',
   isLoggedIn,
   async (req, res, next) => {
-    if (req.body.channel = "Email") {
-      sendMail(req.user, req.body);
-    }
+    let reqDateTime = new Date(`${req.body.date}T${req.body.time}`)
     const reminder = new Reminder(
       {
         name: req.body.name,
-        time: req.body.time,
+        time: reqDateTime,
         task: req.body.task,
         channel: req.body.channel,
         notes: req.body.notes,
-        userId: req.user._id
+        userId: req.user._id,
       })
+    if (req.body.channel = "Email") {
+      sendMail(req.body, reqDateTime); // What, When
+    }
     await reminder.save();
     res.redirect('/reminderList')
   });

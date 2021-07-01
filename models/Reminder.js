@@ -5,7 +5,7 @@ const ObjectId = mongoose.Schema.Types.ObjectId;
 
 var reminderSchema = Schema( {
   name: String,
-  time: String,
+  time: Date,
   task: String,
   channel: String,
   notes: String,
