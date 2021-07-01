@@ -9,6 +9,8 @@ var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 // load up the user model
 var User = require('../models/User');
 
+var USE_PROXY = false; // * Bin you should set this to true
+
 
 
 module.exports = function(passport) {
@@ -48,12 +50,8 @@ module.exports = function(passport) {
     const clientSecret = process.env.clientSecret
     const callbackURL = process.env.callbackURL
 */
-    const HttpsProxyAgent = require('https-proxy-agent');
 
-    const agent = new HttpsProxyAgent(process.env.HTTP_PROXY || "http://127.0.0.1:1087");
-
-
-    const gStrategy =(new GoogleStrategy({
+    const gStrategy = (new GoogleStrategy({
 
         clientID        : clientID,
         clientSecret    : clientSecret,
@@ -112,8 +110,11 @@ module.exports = function(passport) {
         });
 
     }));
-    gStrategy._oauth2.setAgent(agent);
-
+    if (USE_PROXY) {
+        var HttpsProxyAgent = require('https-proxy-agent');
+        var agent = new HttpsProxyAgent(process.env.HTTP_PROXY || "http://127.0.0.1:1087");
+        gStrategy._oauth2.setAgent(agent);
+    }
     passport.use(gStrategy);
 
 };
