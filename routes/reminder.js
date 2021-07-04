@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const sendMail = require('../functions/sendMail')
+const sendTwit = require('../functions/sendTwit')
 const authRouter = require('./authentication');
 const isLoggedIn = authRouter.isLoggedIn
 
@@ -82,6 +83,24 @@ router.post('/update/:id',
       },
       function (err, result) {
         if (err) throw err;
+      }
+    );
+    res.redirect('/reminder/list');
+  });
+
+router.post('/tweet/:id',
+  isLoggedIn,
+  async(req, res, next) => {
+    var id = req.params.id;
+    Reminder.findOne(
+      { _id: id },
+      function (err, result) {
+        if (err){
+          throw err;
+        } else {
+          console.log("Sending DM")
+          sendTwit(result);
+        }
       }
     );
     res.redirect('/reminder/list');
